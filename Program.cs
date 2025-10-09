@@ -23,11 +23,11 @@ class Program
         var user = auth.Login(email, password);
         if (user == null)
         {
-            Console.WriteLine("❌ Wrong credentials");
+            Console.WriteLine("Wrong credentials");
             return;
         }
 
-        Console.WriteLine($"✅ Welcome, {user.FirstName} {user.LastName}!");
+        Console.WriteLine($"Welcome, {user.FirstName} {user.LastName}!");
 
         bool running = true;
         while (running)
@@ -52,14 +52,14 @@ class Program
                     Console.Write("Enter post content: ");
                     string content = Console.ReadLine();
                     social.CreatePost(user, content);
-                    Console.WriteLine("✅ Post created");
+                    Console.WriteLine("Post created");
                     break;
 
                 case "3":
                     Console.Write("Enter friend userId: ");
                     string friendId = Console.ReadLine();
                     social.AddFriend(user, friendId);
-                    Console.WriteLine("✅ Friend added");
+                    Console.WriteLine("Friend added");
                     break;
 
                 case "4":
@@ -70,7 +70,7 @@ class Program
                     Console.Write("Enter comment: ");
                     string comment = Console.ReadLine();
                     social.AddComment(user, ownerId, postId, comment);
-                    Console.WriteLine("✅ Comment added");
+                    Console.WriteLine("Comment added");
                     break;
 
                 case "5":
@@ -79,7 +79,7 @@ class Program
                     Console.Write("Enter postId: ");
                     string likePostId = Console.ReadLine();
                     social.LikePost(user, likeOwner, likePostId);
-                    Console.WriteLine("✅ Post liked");
+                    Console.WriteLine("Post liked");
                     break;
 
                 case "0":
@@ -98,13 +98,11 @@ class Program
         var posts = social.GetStream();
         foreach (var post in posts)
         {
-            // Знаходимо автора поста через AuthorId
             var author = db.Users.Find(u => u.Id == post.AuthorId).FirstOrDefault();
 
             Console.WriteLine($"\n[{post.PostId}] {post.Content} by {author?.FirstName} {author?.LastName} ({post.CreatedAt})");
             Console.WriteLine($"   Likes: {post.Reactions.Count}, Comments: {post.Comments.Count}");
 
-            // Вивід коментарів з іменами авторів
             foreach (var c in post.Comments)
             {
                 var commentAuthor = db.Users.Find(u => u.Id == c.AuthorId).FirstOrDefault();

@@ -15,7 +15,6 @@ namespace SocialNetwork.Services
             _users = db.Users;
         }
 
-        // Додати друга
         public void AddFriend(User user, string friendId)
         {
             if (!user.Friends.Contains(friendId))
@@ -25,7 +24,6 @@ namespace SocialNetwork.Services
             }
         }
 
-        // Створити пост
         public void CreatePost(User user, string content)
         {
             var post = new Post
@@ -38,7 +36,6 @@ namespace SocialNetwork.Services
             _users.ReplaceOne(u => u.Id == user.Id, user);
         }
 
-        // Додати коментар до поста іншого користувача
         public void AddComment(User author, string postOwnerId, string postId, string content)
         {
             var postOwner = _users.Find(u => u.Id == postOwnerId).FirstOrDefault();
@@ -58,7 +55,6 @@ namespace SocialNetwork.Services
             _users.ReplaceOne(u => u.Id == postOwner.Id, postOwner);
         }
 
-        // Лайк на пост
         public void LikePost(User liker, string postOwnerId, string postId)
         {
             var postOwner = _users.Find(u => u.Id == postOwnerId).FirstOrDefault();
@@ -74,7 +70,6 @@ namespace SocialNetwork.Services
             }
         }
 
-        // Отримати всі пости (stream) з усіх користувачів
         public List<Post> GetStream()
         {
             var users = _users.Find(_ => true).ToList();

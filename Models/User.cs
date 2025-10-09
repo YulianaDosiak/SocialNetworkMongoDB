@@ -30,7 +30,6 @@ namespace SocialNetwork.Models
         public List<Comment> Comments { get; set; } = new List<Comment>();
         public List<string> Reactions { get; set; } = new List<string>();
 
-        // Додаткові поля для роботи програми
         [BsonIgnore]
         public string AuthorId { get; set; }
 
@@ -49,7 +48,6 @@ namespace SocialNetwork.Models
         public string Content { get; set; }
         public List<string> Reactions { get; set; } = new List<string>();
 
-        // Додаткові поля для роботи програми
         [BsonIgnore]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
