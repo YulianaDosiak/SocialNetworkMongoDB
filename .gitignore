@@ -1,0 +1,16 @@
+.vs/ 
+bin/ 
+obj/ 
+packages/ 
+*.user 
+*.suo 
+*.exe 
+*.dll 
+*.pdb 
+*.cache 
+App.config 
+Properties/ 
+SocialNetwork.sln 
+libmongocrypt.dylib 
+libmongocrypt.so 
+packages.config 
