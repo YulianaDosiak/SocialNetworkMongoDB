@@ -1,0 +1,565 @@
+[{
+  "_id": "u1",
+  "Email": "anna.khmelnitska@gmail.com",
+  "Password": "Anna2025!",
+  "FirstName": "Anna",
+  "LastName": "Khmelnitska",
+  "Interests": [
+    "travel",
+    "reading",
+    "music"
+  ],
+  "Friends": [
+    "u2",
+    "u3",
+    "u5"
+  ],
+  "Posts": [
+    {
+      "PostId": "p1",
+      "Content": "Щойно повернулась з відпустки, неймовірні враження!",
+      "Comments": [
+        {
+          "CommentId": "c1",
+          "AuthorId": "u2",
+          "Content": "Яка краса!",
+          "Reactions": [
+            "like"
+          ]
+        },
+        {
+          "CommentId": "c2",
+          "AuthorId": "u3",
+          "Content": "Треба і мені туди поїхати!",
+          "Reactions": [
+            "love"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like",
+        "love"
+      ]
+    },
+    {
+      "PostId": "p2",
+      "Content": "Нова книжка, яку прочитала, дуже вразила.",
+      "Comments": [
+        {
+          "CommentId": "c3",
+          "AuthorId": "u4",
+          "Content": "Про яку книжку йде мова?",
+          "Reactions": [
+            "like"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like"
+      ]
+    }
+  ]
+},
+{
+  "_id": "u2",
+  "Email": "maks.kovalenko@gmail.com",
+  "Password": "Maks2025!",
+  "FirstName": "Maks",
+  "LastName": "Kovalenko",
+  "Interests": [
+    "sports",
+    "movies",
+    "gaming"
+  ],
+  "Friends": [
+    "u1",
+    "u5",
+    "u6"
+  ],
+  "Posts": [
+    {
+      "PostId": "p3",
+      "Content": "Сьогодні пробіг 10 км! Відчуваю себе чудово.",
+      "Comments": [
+        {
+          "CommentId": "c4",
+          "AuthorId": "u1",
+          "Content": "Вражає! Молодець!",
+          "Reactions": [
+            "like"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like"
+      ]
+    },
+    {
+      "PostId": "p4",
+      "Content": "Новий фільм вийшов, обов'язково подивлюсь.",
+      "Comments": [
+        {
+          "CommentId": "c5",
+          "AuthorId": "u6",
+          "Content": "Я теж хочу його подивитись!",
+          "Reactions": [
+            "love"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like"
+      ]
+    }
+  ]
+},
+{
+  "_id": "u3",
+  "Email": "olga.melnyk@gmail.com",
+  "Password": "Olga2025!",
+  "FirstName": "Olga",
+  "LastName": "Melnyk",
+  "Interests": [
+    "art",
+    "cooking",
+    "travel"
+  ],
+  "Friends": [
+    "u1",
+    "u4",
+    "u7"
+  ],
+  "Posts": [
+    {
+      "PostId": "p5",
+      "Content": "Намалювала нову картину, дуже задоволена результатом.",
+      "Comments": [
+        {
+          "CommentId": "c6",
+          "AuthorId": "u1",
+          "Content": "Вау! Дуже красиво!",
+          "Reactions": [
+            "love"
+          ]
+        },
+        {
+          "CommentId": "c7",
+          "AuthorId": "u5",
+          "Content": "Хочу побачити фото!",
+          "Reactions": [
+            "like"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like",
+        "love"
+      ]
+    }
+  ]
+},
+{
+  "_id": "u4",
+  "Email": "ivan.petrenko@gmail.com",
+  "Password": "Ivan2025!",
+  "FirstName": "Ivan",
+  "LastName": "Petrenko",
+  "Interests": [
+    "music",
+    "technology",
+    "gaming"
+  ],
+  "Friends": [
+    "u3",
+    "u5",
+    "u6"
+  ],
+  "Posts": [
+    {
+      "PostId": "p6",
+      "Content": "Програмую новий проєкт, дуже цікаво!",
+      "Comments": [
+        {
+          "CommentId": "c8",
+          "AuthorId": "u5",
+          "Content": "Успіхів тобі!",
+          "Reactions": [
+            "like"
+          ]
+        },
+        {
+          "CommentId": "c9",
+          "AuthorId": "u2",
+          "Content": "Поділися кодом!",
+          "Reactions": [
+            "love"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like"
+      ]
+    }
+  ]
+},
+{
+  "_id": "u5",
+  "Email": "sophia.lutsenko@gmail.com",
+  "Password": "Sophia2025!",
+  "FirstName": "Sophia",
+  "LastName": "Lutsenko",
+  "Interests": [
+    "reading",
+    "movies",
+    "fitness"
+  ],
+  "Friends": [
+    "u2",
+    "u4",
+    "u7"
+  ],
+  "Posts": [
+    {
+      "PostId": "p7",
+      "Content": "Закінчила читати новий роман, дуже сподобався.",
+      "Comments": [
+        {
+          "CommentId": "c10",
+          "AuthorId": "u3",
+          "Content": "Яка назва?",
+          "Reactions": [
+            "like"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like"
+      ]
+    },
+    {
+      "PostId": "p8",
+      "Content": "Тренування в спортзалі пройшло відмінно.",
+      "Comments": [
+        {
+          "CommentId": "c11",
+          "AuthorId": "u6",
+          "Content": "Молодець!",
+          "Reactions": [
+            "like"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like"
+      ]
+    }
+  ]
+},
+{
+  "_id": "u6",
+  "Email": "andriy.shulha@gmail.com",
+  "Password": "Andriy2025!",
+  "FirstName": "Andriy",
+  "LastName": "Shulha",
+  "Interests": [
+    "sports",
+    "travel",
+    "music"
+  ],
+  "Friends": [
+    "u2",
+    "u7",
+    "u10"
+  ],
+  "Posts": [
+    {
+      "PostId": "p9",
+      "Content": "Відвідав тренування, почуваюся відмінно.",
+      "Comments": [
+        {
+          "CommentId": "c12",
+          "AuthorId": "u2",
+          "Content": "Молодець!",
+          "Reactions": [
+            "like"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like"
+      ]
+    },
+    {
+      "PostId": "p10",
+      "Content": "Нова подорож запланована на вихідні.",
+      "Comments": [
+        {
+          "CommentId": "c13",
+          "AuthorId": "u1",
+          "Content": "Де саме?",
+          "Reactions": [
+            "love"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like"
+      ]
+    }
+  ]
+},
+{
+  "_id": "u7",
+  "Email": "kateryna.shevchenko@gmail.com",
+  "Password": "Kateryna2025!",
+  "FirstName": "Kateryna",
+  "LastName": "Shevchenko",
+  "Interests": [
+    "art",
+    "cooking",
+    "fitness"
+  ],
+  "Friends": [
+    "u3",
+    "u5",
+    "u8"
+  ],
+  "Posts": [
+    {
+      "PostId": "p11",
+      "Content": "Спробувала новий рецепт, дуже смачно!",
+      "Comments": [
+        {
+          "CommentId": "c14",
+          "AuthorId": "u8",
+          "Content": "Супер, треба спробувати!",
+          "Reactions": [
+            "love"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like"
+      ]
+    }
+  ]
+},
+{
+  "_id": "u8",
+  "Email": "oleg.fedorov@gmail.com",
+  "Password": "Oleg2025!",
+  "FirstName": "Oleg",
+  "LastName": "Fedorov",
+  "Interests": [
+    "technology",
+    "gaming",
+    "music"
+  ],
+  "Friends": [
+    "u7",
+    "u9",
+    "u10"
+  ],
+  "Posts": [
+    {
+      "PostId": "p12",
+      "Content": "Граю в нову гру, дуже цікаво!",
+      "Comments": [
+        {
+          "CommentId": "c15",
+          "AuthorId": "u7",
+          "Content": "Я теж хочу спробувати!",
+          "Reactions": [
+            "like"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like"
+      ]
+    },
+    {
+      "PostId": "p13",
+      "Content": "Тестую нову технологію на роботі.",
+      "Comments": [
+        {
+          "CommentId": "c16",
+          "AuthorId": "u6",
+          "Content": "Поділися результатами!",
+          "Reactions": [
+            "love"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like"
+      ]
+    }
+  ]
+},
+{
+  "_id": "u9",
+  "Email": "natalia.bondarenko@gmail.com",
+  "Password": "Natalia2025!",
+  "FirstName": "Natalia",
+  "LastName": "Bondarenko",
+  "Interests": [
+    "travel",
+    "reading",
+    "movies"
+  ],
+  "Friends": [
+    "u8",
+    "u10",
+    "u1"
+  ],
+  "Posts": [
+    {
+      "PostId": "p14",
+      "Content": "Щойно повернулась з подорожі, неймовірні враження!",
+      "Comments": [
+        {
+          "CommentId": "c17",
+          "AuthorId": "u10",
+          "Content": "Вау, розкажи деталі!",
+          "Reactions": [
+            "like"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like"
+      ]
+    },
+    {
+      "PostId": "p15",
+      "Content": "Рекомендую новий фільм усім друзям.",
+      "Comments": [
+        {
+          "CommentId": "c18",
+          "AuthorId": "u7",
+          "Content": "Обов'язково подивлюсь!",
+          "Reactions": [
+            "love"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like"
+      ]
+    }
+  ]
+},
+{
+  "_id": "u10",
+  "Email": "dmytro.kapustian@gmail.com",
+  "Password": "Dmytro2025!",
+  "FirstName": "Dmytro",
+  "LastName": "Kapustian",
+  "Interests": [
+    "music",
+    "sports",
+    "technology"
+  ],
+  "Friends": [
+    "u6",
+    "u8",
+    "u9"
+  ],
+  "Posts": [
+    {
+      "PostId": "p16",
+      "Content": "Новий плейлист створив, діллюсь з друзями.",
+      "Comments": [
+        {
+          "CommentId": "c19",
+          "AuthorId": "u9",
+          "Content": "Клас! Поділися посиланням.",
+          "Reactions": [
+            "love"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like"
+      ]
+    },
+    {
+      "PostId": "p17",
+      "Content": "Зайнявся спортом на вихідних.",
+      "Comments": [
+        {
+          "CommentId": "c20",
+          "AuthorId": "u5",
+          "Content": "Молодець!",
+          "Reactions": [
+            "like"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like"
+      ]
+    },
+    {
+      "PostId": "p18",
+      "Content": "Тестую нову гру, дуже цікаво!",
+      "Comments": [
+        {
+          "CommentId": "c21",
+          "AuthorId": "u8",
+          "Content": "Я теж хочу спробувати!",
+          "Reactions": [
+            "like"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like"
+      ]
+    },
+    {
+      "PostId": "p19",
+      "Content": "Читаю нову книгу з програмування.",
+      "Comments": [
+        {
+          "CommentId": "c22",
+          "AuthorId": "u6",
+          "Content": "Цікаво, яка книга?",
+          "Reactions": [
+            "love"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like"
+      ]
+    },
+    {
+      "PostId": "p20",
+      "Content": "Вчора відвідав концерт, дуже сподобалось!",
+      "Comments": [
+        {
+          "CommentId": "c23",
+          "AuthorId": "u1",
+          "Content": "Класно!",
+          "Reactions": [
+            "like"
+          ]
+        },
+        {
+          "CommentId": "c24",
+          "AuthorId": "u9",
+          "Content": "Я теж хотів бути там!",
+          "Reactions": [
+            "love"
+          ]
+        }
+      ],
+      "Reactions": [
+        "like",
+        "love"
+      ]
+    }
+  ]
+}]
