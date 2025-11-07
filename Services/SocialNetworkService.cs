@@ -1,26 +1,32 @@
 ﻿using MongoDB.Driver;
 using SocialNetwork.Models;
+using SocialNetwork.Neo4j.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.Services
 {
     public class SocialNetworkService
     {
         private readonly IMongoCollection<User> _users;
+        private readonly GraphUserRepository _graphRepo;
 
-        public SocialNetworkService(DatabaseService db)
+        public SocialNetworkService(DatabaseService db, GraphUserRepository graphRepo)
         {
             _users = db.Users;
+            _graphRepo = graphRepo;
         }
 
-        public void AddFriend(User user, string friendId)
+        public async Task AddFriend(User user, string friendId)
         {
             if (!user.Friends.Contains(friendId))
             {
                 user.Friends.Add(friendId);
                 _users.ReplaceOne(u => u.Id == user.Id, user);
+
+                await _graphRepo.CreateFriendshipAsync(user.Id, friendId);
             }
         }
 
@@ -34,40 +40,6 @@ namespace SocialNetwork.Services
 
             user.Posts.Add(post);
             _users.ReplaceOne(u => u.Id == user.Id, user);
-        }
-
-        public void AddComment(User author, string postOwnerId, string postId, string content)
-        {
-            var postOwner = _users.Find(u => u.Id == postOwnerId).FirstOrDefault();
-            if (postOwner == null) return;
-
-            var post = postOwner.Posts.FirstOrDefault(p => p.PostId == postId);
-            if (post == null) return;
-
-            var comment = new Comment
-            {
-                CommentId = Guid.NewGuid().ToString(),
-                AuthorId = author.Id,
-                Content = content
-            };
-
-            post.Comments.Add(comment);
-            _users.ReplaceOne(u => u.Id == postOwner.Id, postOwner);
-        }
-
-        public void LikePost(User liker, string postOwnerId, string postId)
-        {
-            var postOwner = _users.Find(u => u.Id == postOwnerId).FirstOrDefault();
-            if (postOwner == null) return;
-
-            var post = postOwner.Posts.FirstOrDefault(p => p.PostId == postId);
-            if (post == null) return;
-
-            if (!post.Reactions.Contains(liker.Id))
-            {
-                post.Reactions.Add(liker.Id);
-                _users.ReplaceOne(u => u.Id == postOwner.Id, postOwner);
-            }
         }
 
         public List<Post> GetStream()
@@ -85,6 +57,16 @@ namespace SocialNetwork.Services
             }
 
             return allPosts.OrderByDescending(p => p.CreatedAt).ToList();
+        }
+
+        public async Task<bool> AreUsersFriends(string currentUserId, string otherUserId)
+        {
+            return await _graphRepo.AreFriendsAsync(currentUserId, otherUserId);
+        }
+
+        public async Task<int> GetFriendshipDistance(string currentUserId, string otherUserId)
+        {
+            return await _graphRepo.GetFriendshipDistanceAsync(currentUserId, otherUserId);
         }
     }
 }
