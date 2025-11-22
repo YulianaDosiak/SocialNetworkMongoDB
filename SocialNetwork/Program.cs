@@ -1,165 +1,85 @@
-﻿using MongoDB.Driver;
-using SocialNetwork.Models;
-using SocialNetwork.Services;
-using SocialNetwork.Neo4j.DAL;
-using System;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.Model;
+using SocialNetwork.DynamoDB.DAL.Repositories;
+using SocialNetwork.Services;
 
-class Program
+namespace SocialNetwork
 {
-    static async Task Main()
+    class Program
     {
-        var db = new DatabaseService();
-
-        var graphDb = new GraphDatabaseService();
-        var graphRepo = new GraphUserRepository(graphDb);
-
-        var auth = new AuthService(db, graphRepo);
-        var social = new SocialNetworkService(db, graphRepo);
-
-        User user = null;
-        bool running = true;
-
-        Console.WriteLine("=== Social Network ===");
-
-        while (user == null && running)
+        static async Task Main(string[] args)
         {
-            Console.WriteLine("1. Login");
-            Console.WriteLine("2. Register");
-            Console.WriteLine("0. Exit");
-            Console.Write("Choose: ");
-            string authChoice = Console.ReadLine();
-
-            switch (authChoice)
+            var config = new AmazonDynamoDBConfig
             {
-                case "1":
-                    Console.Write("Email: ");
-                    string email = Console.ReadLine();
-                    Console.Write("Password: ");
-                    string password = Console.ReadLine();
-                    user = auth.Login(email, password);
-                    if (user == null) Console.WriteLine("Wrong credentials");
-                    break;
+                ServiceURL = "http://localhost:8001"
+            };
 
-                case "2":
-                    Console.Write("First Name: ");
-                    string firstName = Console.ReadLine();
-                    Console.Write("Last Name: ");
-                    string lastName = Console.ReadLine();
-                    Console.Write("Email: ");
-                    string regEmail = Console.ReadLine();
-                    Console.Write("Password: ");
-                    string regPassword = Console.ReadLine();
-                    user = await auth.Register(regEmail, regPassword, firstName, lastName);
-                    if (user != null) Console.WriteLine("Registration successful!");
-                    break;
+            var client = new AmazonDynamoDBClient("admin", "1234", config);
 
-                case "0":
-                    running = false;
-                    break;
-            }
+            await CreateTableIfNotExists(client);
+
+            IPostRepository repository = new PostRepository(client);
+            var service = new SocialNetworkService(repository);
+            Console.WriteLine("Creating Post...");
+            string postId = Guid.NewGuid().ToString();
+            string authorId = "User1";
+            await service.CreatePost(postId, "Hello DynamoDB", authorId);
+
+            Console.WriteLine("Adding Comments...");
+            await service.AddComment(postId, "First Comment", "User2");
+            await Task.Delay(1000);
+            await service.AddComment(postId, "Second Comment", "User3");
+
+            Console.WriteLine("Reading Comments (Sorted)...");
+            await service.ShowComments(postId);
+
+            Console.WriteLine("Editing Post...");
+            await service.EditPost(postId, "Hello Updated DynamoDB");
+
+            Console.WriteLine("Done! Press any key to exit...");
+            Console.ReadKey();
         }
 
-        if (user == null)
+        private static async Task CreateTableIfNotExists(IAmazonDynamoDB client)
         {
-            graphDb.Dispose();
-            return;
-        }
+            string tableName = "SocialNetwork";
 
-        Console.WriteLine($"Welcome, {user.FirstName} {user.LastName}!");
-
-        while (running)
-        {
-            Console.WriteLine("\n--- MENU ---");
-            Console.WriteLine("1. Show stream (all posts)");
-            Console.WriteLine("2. Create post");
-            Console.WriteLine("3. Add friend");
-            Console.WriteLine("4. Comment post");
-            Console.WriteLine("5. Like post");
-            Console.WriteLine("6. View User Profile (Neo4j)");
-            Console.WriteLine("0. Exit");
-            Console.Write("Choose: ");
-
-            string choice = Console.ReadLine();
-            switch (choice)
+            var tables = await client.ListTablesAsync();
+            if (tables.TableNames.Contains(tableName))
             {
-                case "1":
-                    ShowStream(social, db);
-                    break;
-
-                case "2":
-                    Console.Write("Enter post content: ");
-                    string content = Console.ReadLine();
-                    social.CreatePost(user, content);
-                    Console.WriteLine("Post created");
-                    break;
-
-                case "3":
-                    Console.Write("Enter friend userId: ");
-                    string friendId = Console.ReadLine();
-                    await social.AddFriend(user, friendId);
-                    Console.WriteLine("Friend added");
-                    break;
-
-                case "4":
-                    Console.Write("Enter post owner userId: ");
-                    string ownerId = Console.ReadLine();
-                    Console.Write("Enter postId: ");
-                    string postId = Console.ReadLine();
-                    Console.Write("Enter comment: ");
-                    string comment = Console.ReadLine();
-                    // social.AddComment(user, ownerId, postId, comment); // Ваш метод не був наданий у файлах
-                    Console.WriteLine("Comment added");
-                    break;
-
-                case "5":
-                    Console.Write("Enter post owner userId: ");
-                    string likeOwner = Console.ReadLine();
-                    Console.Write("Enter postId: ");
-                    string likePostId = Console.ReadLine();
-                    // social.LikePost(user, likeOwner, likePostId); // Ваш метод не був наданий у файлах
-                    Console.WriteLine("Post liked");
-                    break;
-
-                case "6":
-                    Console.Write("Enter userId to view: ");
-                    string otherUserId = Console.ReadLine();
-
-                    if (otherUserId == user.Id)
-                    {
-                        Console.WriteLine("That's you!");
-                        break;
-                    }
-
-                    bool isFriend = await social.AreUsersFriends(user.Id, otherUserId);
-                    Console.WriteLine($"Are you friends? {isFriend}");
-
-                    int distance = await social.GetFriendshipDistance(user.Id, otherUserId);
-                    Console.WriteLine($"Friendship distance: {(distance == -1 ? "No connection" : distance.ToString())}");
-                    break;
-
-                case "0":
-                    running = false;
-                    break;
-
-                default:
-                    Console.WriteLine("❌ Wrong option");
-                    break;
+                return;
             }
-        }
 
-        graphDb.Dispose();
-    }
+            Console.WriteLine("Creating table...");
 
-    static void ShowStream(SocialNetworkService social, DatabaseService db)
-    {
-        var posts = social.GetStream();
-        foreach (var post in posts)
-        {
-            var author = db.Users.Find(u => u.Id == post.AuthorId).FirstOrDefault();
-            Console.WriteLine($"\n[{post.PostId}] {post.Content} by {author?.FirstName} {author?.LastName} ({post.CreatedAt})");
-            Console.WriteLine($"   Likes: {post.Reactions.Count}, Comments: {post.Comments.Count}");
+            var request = new CreateTableRequest
+            {
+                TableName = tableName,
+                AttributeDefinitions = new List<AttributeDefinition>
+                {
+                    new AttributeDefinition { AttributeName = "PK", AttributeType = "S" },
+                    new AttributeDefinition { AttributeName = "SK", AttributeType = "S" }
+                },
+                KeySchema = new List<KeySchemaElement>
+                {
+                    new KeySchemaElement { AttributeName = "PK", KeyType = KeyType.HASH },
+                    new KeySchemaElement { AttributeName = "SK", KeyType = KeyType.RANGE }
+                },
+                ProvisionedThroughput = new ProvisionedThroughput
+                {
+                    ReadCapacityUnits = 5,
+                    WriteCapacityUnits = 5
+                }
+            };
+
+            await client.CreateTableAsync(request);
+
+            Console.WriteLine("Waiting for table to be active...");
+            await Task.Delay(2000);
+            Console.WriteLine("Table created.");
         }
     }
 }

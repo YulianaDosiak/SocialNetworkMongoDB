@@ -1,72 +1,62 @@
-﻿using MongoDB.Driver;
-using SocialNetwork.Models;
-using SocialNetwork.Neo4j.DAL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
+using SocialNetwork.DynamoDB.DAL.Models;
+using SocialNetwork.DynamoDB.DAL.Repositories;
 
 namespace SocialNetwork.Services
 {
     public class SocialNetworkService
     {
-        private readonly IMongoCollection<User> _users;
-        private readonly GraphUserRepository _graphRepo;
+        private readonly IPostRepository _postRepository;
 
-        public SocialNetworkService(DatabaseService db, GraphUserRepository graphRepo)
+        public SocialNetworkService(IPostRepository postRepository)
         {
-            _users = db.Users;
-            _graphRepo = graphRepo;
+            _postRepository = postRepository;
         }
 
-        public async Task AddFriend(User user, string friendId)
+        public async Task CreatePost(string postId, string content, string authorId)
         {
-            if (!user.Friends.Contains(friendId))
+            var post = new PostEntity
             {
-                user.Friends.Add(friendId);
-                _users.ReplaceOne(u => u.Id == user.Id, user);
-
-                await _graphRepo.CreateFriendshipAsync(user.Id, friendId);
-            }
-        }
-
-        public void CreatePost(User user, string content)
-        {
-            var post = new Post
-            {
-                PostId = Guid.NewGuid().ToString(),
-                Content = content
+                PostId = postId,
+                Content = content,
+                AuthorId = authorId,
+                CreatedDateTime = DateTime.UtcNow.ToString("s")
             };
 
-            user.Posts.Add(post);
-            _users.ReplaceOne(u => u.Id == user.Id, user);
+            await _postRepository.CreatePostAsync(post);
+            Console.WriteLine($"Post created: {post.PostId}");
         }
 
-        public List<Post> GetStream()
+        public async Task AddComment(string postId, string content, string authorId)
         {
-            var users = _users.Find(_ => true).ToList();
-
-            var allPosts = new List<Post>();
-            foreach (var user in users)
+            var comment = new CommentEntity
             {
-                foreach (var post in user.Posts)
-                {
-                    post.AuthorId = user.Id;
-                    allPosts.Add(post);
-                }
+                CommentId = Guid.NewGuid().ToString(),
+                PostId = postId,
+                Content = content,
+                AuthorId = authorId,
+                ModifiedDateTime = DateTime.UtcNow.ToString("s")
+            };
+
+            await _postRepository.CreateCommentAsync(comment);
+            Console.WriteLine("Comment added.");
+        }
+
+        public async Task EditPost(string postId, string newContent)
+        {
+            await _postRepository.UpdatePostContentAsync(postId, newContent);
+            Console.WriteLine("Post updated.");
+        }
+
+        public async Task ShowComments(string postId)
+        {
+            var comments = await _postRepository.GetCommentsForPostAsync(postId);
+            Console.WriteLine($"Comments for Post {postId}:");
+            foreach (var c in comments)
+            {
+                Console.WriteLine($"[{c.ModifiedDateTime}] {c.AuthorId}: {c.Content}");
             }
-
-            return allPosts.OrderByDescending(p => p.CreatedAt).ToList();
-        }
-
-        public async Task<bool> AreUsersFriends(string currentUserId, string otherUserId)
-        {
-            return await _graphRepo.AreFriendsAsync(currentUserId, otherUserId);
-        }
-
-        public async Task<int> GetFriendshipDistance(string currentUserId, string otherUserId)
-        {
-            return await _graphRepo.GetFriendshipDistanceAsync(currentUserId, otherUserId);
         }
     }
 }
